@@ -118,41 +118,26 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"epB2":[function(require,module,exports) {
-var $siteList = $('.siteList');
-var $lastLi = $siteList.find('li.last');
 var x = localStorage.getItem('x');
 var xObject = JSON.parse(x);
 var hashMap = xObject || [{
-  logo: 'A',
-  url: 'https://www.acfun.cn'
+  logo: 'J',
+  url: 'https://juejin.im/'
 }, {
-  logo: 'B',
-  url: 'https://www.bilibili.com'
+  logo: 'Z',
+  url: 'https://www.zhihu.com/'
+}, {
+  logo: 'W',
+  url: 'https://www.w3.org/'
 }];
 
 var simplifyUrl = function simplifyUrl(url) {
-  return url.replace('https://', '').replace('http://', '').replace('www.', '').replace(/\/.*/, ''); // 删除 / 开头的内容
-};
+  return url.replace('https://', '').replace('http://', '').replace('www.', '').replace(/\/.*/, '');
+}; // 添加网址
 
-var render = function render() {
-  $siteList.find('li:not(.last)').remove();
-  hashMap.forEach(function (node, index) {
-    var $li = $("<li>\n      <div class=\"site\">\n        <div class=\"logo\">".concat(node.logo, "</div>\n        <div class=\"link\">").concat(simplifyUrl(node.url), "</div>\n        <div class=\"close\">\n          <svg class=\"icon\">\n            <use xlink:href=\"#icon-close\"></use>\n          </svg>\n        </div>\n      </div>\n    </li>")).insertBefore($lastLi);
-    $li.on('click', function () {
-      window.open(node.url);
-    });
-    $li.on('click', '.close', function (e) {
-      e.stopPropagation(); // 阻止冒泡
 
-      hashMap.splice(index, 1);
-      render();
-    });
-  });
-};
-
-render();
-$('.addButton').on('click', function () {
-  var url = window.prompt('请问你要添加的网址是啥？');
+$('.last').on('click', function () {
+  var url = window.prompt('请输入您添加的网址');
 
   if (url.indexOf('http') !== 0) {
     url = 'https://' + url;
@@ -164,7 +149,25 @@ $('.addButton').on('click', function () {
     url: url
   });
   render();
-});
+}); // render函数
+
+var render = function render() {
+  $('.siteList').find('li:not(.last)').remove();
+  hashMap.forEach(function (item, index) {
+    var $li = $("<li>\n      <div class=\"site\">\n        <div class=\"logo\">".concat(item.logo, "</div>\n        <div class=\"link\">").concat(simplifyUrl(item.url), "</div>\n        <div class=\"close\">\n          <svg class=\"icon\">\n            <use xlink:href=\"#icon-close\"></use>\n          </svg>\n        </div>\n      </div>\n    </li>")).insertBefore($('.last'));
+    $li.on('click', function () {
+      window.open(item.url);
+    });
+    $li.on('click', '.close', function (e) {
+      e.stopPropagation(); // 阻止冒泡
+
+      hashMap.splice(index, 1);
+      render();
+    });
+  });
+};
+
+render();
 
 window.onbeforeunload = function () {
   var string = JSON.stringify(hashMap);
@@ -181,4 +184,4 @@ $(document).on('keypress', function (e) {
   }
 });
 },{}]},{},["epB2"], null)
-//# sourceMappingURL=main.65ce31ab.js.map
+//# sourceMappingURL=main.e6219ffd.js.map
